@@ -98,14 +98,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;
@@ -186,14 +193,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;
@@ -274,14 +288,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;
@@ -363,14 +384,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;
@@ -452,14 +480,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;
@@ -560,14 +595,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;
@@ -678,14 +720,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     var Message = ex.Message;
@@ -808,14 +857,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     var Message = ex.Message;
@@ -912,14 +968,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     var Message = ex.Message;
@@ -1015,14 +1078,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     var Message = ex.Message;
@@ -1118,14 +1188,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     var Message = ex.Message;
@@ -1222,14 +1299,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     Message = ex.Message;
@@ -1329,14 +1413,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     Message = ex.Message;
@@ -1433,14 +1524,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     var Message = ex.Message;
@@ -1523,14 +1621,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     var Message = ex.Message;
@@ -1626,14 +1731,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     Message = ex.Message;
@@ -1725,14 +1837,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;
@@ -1815,14 +1934,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     Message = ex.Message;

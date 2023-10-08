@@ -57,20 +57,29 @@ namespace SospectAPI.Controllers
                 {
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
                     NpgsqlConnection connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+                    var v_idioma_origen = "es";
+                    var v_idioma_destino = model.Idioma;
+
                     await connection.OpenAsync();
 
-                    var command = new NpgsqlCommand("CALL public.UpsertUbicacion(:p_user_id_thirdparty,:p_latitud,:p_longitud);", connection);
+                    if (model.PantallaOrigen != "DescribirAlarma")
+                    {
+                        var command = new NpgsqlCommand("CALL public.UpsertUbicacion(:p_user_id_thirdparty,:p_latitud,:p_longitud);", connection);
 
-                    command.Parameters.AddWithValue(":p_user_id_thirdparty", NpgsqlDbType.Varchar, model.p_user_id_thirdparty);
-                    command.Parameters.AddWithValue(":p_latitud", NpgsqlDbType.Numeric, model.latitud);
-                    command.Parameters.AddWithValue(":p_longitud", NpgsqlDbType.Numeric, model.longitud);
+                        command.Parameters.AddWithValue(":p_user_id_thirdparty", NpgsqlDbType.Varchar, model.p_user_id_thirdparty);
+                        command.Parameters.AddWithValue(":p_latitud", NpgsqlDbType.Numeric, model.latitud);
+                        command.Parameters.AddWithValue(":p_longitud", NpgsqlDbType.Numeric, model.longitud);
 
-                    result = await command.ExecuteNonQueryAsync();
+                        result = await command.ExecuteNonQueryAsync();
+                    }
+                    else
+                    {
+                        result = -1;    
+                    }
 
                     if (result < 0)
                     {
-                        var v_idioma_origen = "es";
-                        var v_idioma_destino = model.Idioma;
+
                         string sql5 = $"select coalesce(cantidad,0) as cantidad from public.vw_cantidad_alarmas_zona\r\nWHERE user_id_thirdparty = \'{model.p_user_id_thirdparty}\';";
                         using (NpgsqlCommand command5 = new NpgsqlCommand(sql5, connection))
                         {
@@ -86,7 +95,7 @@ namespace SospectAPI.Controllers
                             }
 
 
-                            if (cantidad>0)
+                            if (cantidad > 0)
                             {
                                 var txt_notif = $"Ten cuidado! Acabas de entrar a una zona con alertas activas o tus subscripciones notificaron alertas. Cantidad de alertas a revisar: {cantidad}";
 
@@ -114,11 +123,10 @@ namespace SospectAPI.Controllers
                                 await _NotificationHubService.RequestNotificationAsync(notificationRequest, CancellationToken.None);
 
                             }
-                            
+
 
                         }
                         connection.Close(); //close the current connection
-
 
                         await connection.OpenAsync();
 
@@ -130,15 +138,58 @@ namespace SospectAPI.Controllers
 
                         List<AlarmaCercanasResponse> LstAlarmasCercanas = new List<AlarmaCercanasResponse>();
                         NpgsqlDataReader reader;
-                        string sql2 = $"SELECT  user_id_thirdparty\r\n ,persona_id \r\n     ,user_id_creador_alarma\r\n       ,login_usuario_notificar\r\n       ,latitud_alarma\r\n       ,longitud_alarma\r\n       ,latitud_entrada\r\n       ,longitud_entrada\r\n       ,coalesce(tipo_subscr_activa_usuario,'Ninguna')\r\n       ,coalesce(fecha_activacion_subscr,'2000-01-01 00:00:00')\r\n       ,coalesce(fecha_finalizacion_subscr,'2000-01-01 00:00:00')\r\n       ,distancia_en_metros\r\n\t   ,alarma_id\r\n\t   ,fecha_alarma\r\n\t   ,descripciontipoalarma\r\n\t   ,tipoalarma_id\r\n\t   ,TiempoRefrescoUbicacion\r\n\t   ,flag_propietario_alarma\r\n\t   ,calificacion_actual_alarma\r\n\t   ,UsuarioCalificoAlarma\r\n\t   ,CalificacionAlarmaUsuario\r\n\t,cast(TRUE AS BOOLEAN) AS EsAlarmaActiva\r\n\t ,alarma_id_padre\r\n\t ,calificacion_alarma\r\n\t  FROM vw_busca_alarmas_por_zona WHERE user_id_thirdparty = \'{model.p_user_id_thirdparty}\' order by fecha_alarma DESC;\r\n";
-                        using (NpgsqlCommand command3 = new NpgsqlCommand(sql2, connection))
+
+                        string sql2;
+
+                        string tableName = (model.PantallaOrigen == "DescribirAlarma") ? "vw_busca_alarmas_por_zona" : "vw_busca_alarmas_por_zona2";
+
+                        sql2 = $@"SELECT  user_id_thirdparty
+                                    ,persona_id 
+                                    ,user_id_creador_alarma
+                                    ,login_usuario_notificar
+                                    ,latitud_alarma
+                                    ,longitud_alarma
+                                    ,latitud_entrada
+                                    ,longitud_entrada
+                                    ,coalesce(tipo_subscr_activa_usuario,'Ninguna')
+                                    ,fecha_activacion_subscr
+                                    ,fecha_finalizacion_subscr
+                                    ,distancia_en_metros
+                                    ,alarma_id
+                                    ,fecha_alarma
+                                    ,descripciontipoalarma
+                                    ,tipoalarma_id
+                                    ,TiempoRefrescoUbicacion
+                                    ,flag_propietario_alarma
+                                    ,calificacion_actual_alarma
+                                    ,UsuarioCalificoAlarma
+                                    ,CalificacionAlarmaUsuario
+                                    ,EsAlarmaActiva
+                                    ,alarma_id_padre
+                                    ,calificacion_alarma
+                                    ,estado_alarma
+	                                ,Flag_hubo_captura
+	                                ,flag_alarma_siendo_atendida
+	                                ,cantidad_agentes_atendiendo
+                                    ,cantidad_interacciones
+                                    ,flag_es_policia
+                                FROM {tableName} WHERE user_id_thirdparty = @UserId order by fecha_alarma DESC";
+
+                        // Luego, al ejecutar la consulta, usas parámetros para evitar inyecciones SQL
+                        NpgsqlCommand cmd = new NpgsqlCommand(sql2, connection);
+                        cmd.Parameters.AddWithValue("@UserId", NpgsqlDbType.Varchar, model.p_user_id_thirdparty);
+
+                        // Aquí ejecutarías el comando y obtendrías los resultados
+
+
+                        using (reader = cmd.ExecuteReader())
                         {
                             //ConsultaDePuntosDelMapaAColocarEnNuevaUbicacionDeUsuario;
-                            reader = command3.ExecuteReader();
-                            
+
+
                             while (reader.Read())
                             {
-                                
+
                                 AlarmaCercanasResponse RegistroDeAlarma = new AlarmaCercanasResponse();
 
                                 RegistroDeAlarma.user_id_thirdparty = reader[0].ToString();
@@ -165,19 +216,12 @@ namespace SospectAPI.Controllers
                                 RegistroDeAlarma.EsAlarmaActiva = reader.GetBoolean(21);
                                 RegistroDeAlarma.alarma_id_padre = reader.IsDBNull(22) ? (long?)null : reader.GetInt64(22);
                                 RegistroDeAlarma.calificacion_alarma = reader.IsDBNull(23) ? (long?)null : reader.GetDecimal(23);
-
-                                if (v_idioma_origen != v_idioma_destino)
-                                {
-                                    try
-                                    {
-                                        RegistroDeAlarma.descripciontipoalarma = await _traductorService.Traducir(v_idioma_origen, v_idioma_destino, RegistroDeAlarma.descripciontipoalarma);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        RegistroDeAlarma.descripciontipoalarma = reader[14].ToString();
-                                     }
-
-                                }
+                                RegistroDeAlarma.estado_alarma = reader.GetBoolean(24);
+                                RegistroDeAlarma.Flag_hubo_captura = reader.GetBoolean(25);
+                                RegistroDeAlarma.flag_alarma_siendo_atendida = reader.GetBoolean(26);
+                                RegistroDeAlarma.cantidad_agentes_atendiendo = reader.GetInt32(27);
+                                RegistroDeAlarma.cantidad_interacciones = reader.GetInt32(28);
+                                RegistroDeAlarma.flag_es_policia = reader.GetBoolean(29);
 
                                 LstAlarmasCercanas.Add(RegistroDeAlarma);
                             }
@@ -217,14 +261,21 @@ namespace SospectAPI.Controllers
                             // Crea un objeto PutObjectRequest
                             var putRequest = new PutObjectRequest
                             {
-                                BucketName = "bucketS3_AWS",
+                                BucketName = "sospect-s3-data-bucket-prod",
                                 Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                                 ContentType = "application/json",
                                 ContentBody = logString
                             };
 
                             // Sube el registro de error a S3
-                            var response = await _s3.PutObjectAsync(putRequest);
+                            try
+                            {
+                                var response = await _s3.PutObjectAsync(putRequest);
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("Error writing to AWS");
+                            }
 
                             // Devuelve una respuesta de error al cliente
 
@@ -269,14 +320,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;
@@ -328,20 +386,7 @@ namespace SospectAPI.Controllers
                             RegistroDeAlarma.alarma_id = reader.GetInt64(3);
                             RegistroDeAlarma.fecha_alarma = reader.GetDateTime(4);
                             RegistroDeAlarma.descripciontipoalarma = reader[5].ToString();
-
-                            if (v_idioma_origen != v_idioma_destino)
-                            {
-                                try
-                                {
-                                    RegistroDeAlarma.descripciontipoalarma = await _traductorService.Traducir(v_idioma_origen, v_idioma_destino, RegistroDeAlarma.descripciontipoalarma);
-                                }
-                                catch (Exception)
-                                {
-                                    RegistroDeAlarma.descripciontipoalarma = reader[5].ToString(); 
-                                }
-
-                            }
-
+                            
                             LstAlarmasCercanas.Add(RegistroDeAlarma);
                         }
 
@@ -373,14 +418,21 @@ namespace SospectAPI.Controllers
                     // Crea un objeto PutObjectRequest
                     var putRequest = new PutObjectRequest
                     {
-                        BucketName = "bucketS3_AWS",
+                        BucketName = "sospect-s3-data-bucket-prod",
                         Key = $"error_logs/{DateTime.UtcNow:yyyyMMdd_HHmmss}.json",
                         ContentType = "application/json",
                         ContentBody = logString
                     };
 
                     // Sube el registro de error a S3
-                    var response = await _s3.PutObjectAsync(putRequest);
+                    try
+                    {
+                        var response = await _s3.PutObjectAsync(putRequest);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error writing to AWS");
+                    }
 
                     // Devuelve una respuesta de error al cliente
                     responseMessage.IsSuccess = false;

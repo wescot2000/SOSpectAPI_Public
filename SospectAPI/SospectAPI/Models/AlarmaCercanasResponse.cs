@@ -28,6 +28,11 @@ namespace SospectAPI.Models
         public bool EsAlarmaActiva { get; set; }
         public long? alarma_id_padre { get; set; }
         public decimal? calificacion_alarma { get; set; }
-
+        public bool estado_alarma { get; set; }
+        public bool Flag_hubo_captura { get; set; }
+        public bool flag_alarma_siendo_atendida { get; set; }
+        public int cantidad_agentes_atendiendo { get; set; }
+        public int cantidad_interacciones { get; set; }
+        public bool flag_es_policia { get; set; }
     }
 }
