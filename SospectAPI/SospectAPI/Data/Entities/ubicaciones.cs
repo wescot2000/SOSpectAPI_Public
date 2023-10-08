@@ -19,5 +19,8 @@ namespace SospectAPI.Data.Entities
         [Required]
         public string Idioma { get; set; }
 
+        [Required]
+        public string PantallaOrigen { get; set; }
+
     }
 }
